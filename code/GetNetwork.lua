@@ -8,8 +8,6 @@ print("removeee")
 file.open("settings.lua", "w+")
 file.close()
 
-password = "abcd"
-status = 0
 
 
 srv:listen(80,function(conn) 
@@ -21,27 +19,11 @@ srv:listen(80,function(conn)
         end
         local _GET = {}
 
-        if (status == 1) then
-            status = 0
-		else
-		file.remove("settings.lua")
-        end
                 
         if (vars ~= nil)then 
             for k, v in string.gmatch(vars, "(%w+)=([%w+-@%%]+)&*") do 
-            
-            if(k=="device") then
-                if(v==password) then
-                    status = 1
-                else
-					print("Wrong password")
-					file.remove("settings.lua")
-                end
-            end
-            
-            if (status == 1 and k ~= "device") then
                 _GET[k] = v
-            end
+
             
             end 
         end
@@ -58,11 +40,6 @@ srv:listen(80,function(conn)
         file.close()
         print("Done")
 
-        if (status==1)then
-			node.restart();
-			print("Restart")
-        end
-                
         buf = buf..'<h1> Hello, Please enter the following information.</h1>';
         buf = buf..'<form src=\"/\"><hr>';
         buf = buf..'SSID of the network:<br><input type="text" name="ssid"><br>Password:<br>';
